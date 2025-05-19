@@ -21,6 +21,31 @@ class HTMLNode():
     def __repr__(self):
         return f"HTMLNode({self.tag}, {self.value}, {self.children}, {self.props})"
     
+    def __eq__(self, other):
+        if (not isinstance(other, HTMLNode)):
+            return False
+        if self.tag != other.tag or self.value != other.value:
+            return False
+        if self.children is None:
+            if other.children is not None:
+                return False
+        else:
+            for child in self.children:
+                other_has_match = False
+                for other_child in other.children:
+                    if child == other_child:
+                        other_has_match = True
+                        break
+                if not other_has_match: 
+                    return False
+        if self.props is None:
+            if other.props is not None:
+                return False
+        return self.children == other.children
+            
+
+        
+    
 class LeafNode(HTMLNode):
 
     def __init__(self, tag, value, props=None):
