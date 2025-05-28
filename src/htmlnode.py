@@ -47,7 +47,6 @@ class HTMLNode():
         
     
 class LeafNode(HTMLNode):
-
     def __init__(self, tag, value, props=None):
         if value is None:
             raise ValueError("Leaf nodes must have a value")
@@ -62,7 +61,6 @@ class LeafNode(HTMLNode):
         return f"LeafNode({self.tag}, {self.value}, {self.props})"
 
 class ParentNode(HTMLNode):
-
     def __init__(self, tag, children, props=None):
         super().__init__(tag, None, children, props)
     
@@ -70,7 +68,7 @@ class ParentNode(HTMLNode):
         if self.tag is None:
             raise ValueError("ParentNode must have a tag")
         elif self.children is None:
-            raise ValueError("ParentNode must have a 'children' dictionary")
+            raise ValueError("ParentNode must have a 'children' list")
         result = f"<{self.tag}{self.props_to_html()}>"
         for child in self.children:
             result += child.to_html()
