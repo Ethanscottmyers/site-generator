@@ -50,15 +50,25 @@ def markdown_to_html_node(markdown):
             case BlockType.HEADING:
                 h_num = heading_number(block)
                 block = block[h_num+1:]
-                children.append(ParentNode(f"H{h_num}", text_to_children(block.replace("\n", " "))))
+                children.append(ParentNode(f"h{h_num}", text_to_children(block.replace("\n", " "))))
             case BlockType.CODE:
                 block = block.strip("`").strip("\n")
                 children.append(ParentNode("pre", [LeafNode("code", block)]))
             case BlockType.QUOTE:
-                block = block.replace(">", "")
+                block = block.replace("> ", "")
                 children.append(ParentNode("blockquote", text_to_children(block)))
             case BlockType.UNORDERED_LIST:
                 children.append(ParentNode("ul", children_lines(block, BlockType.UNORDERED_LIST)))
             case BlockType.ORDERED_LIST:
                 children.append(ParentNode("ol", children_lines(block, BlockType.ORDERED_LIST)))
     return ParentNode("div", children)
+
+
+def extract_title(markdown):
+    heading = None
+    for block in markdown_to_blocks(markdown):
+        if block_to_block_type(block) == BlockType.HEADING and block.startswith("# "):
+            heading = block[2:]
+    if heading is None:
+        raise Exception("No h1 in markdown given")
+    return heading

@@ -1,5 +1,5 @@
 import unittest
-from convert_markdown import markdown_to_blocks, markdown_to_html_node
+from convert_markdown import markdown_to_blocks, markdown_to_html_node, extract_title
 
 class TestConvertMarkdown(unittest.TestCase):
     def test_markdown_to_blocks(self):
@@ -90,4 +90,31 @@ and a paragraph with **bold** text
         html = node.to_html()
         self.assertEqual(html, 
             "<div><ol><li>this is an</li><li>ordered</li><li>list</li></ol><p>and a paragraph with <b>bold</b> text</p></div>")
+        print("Passed!")
+
+
+    def test_extract_title(self):
+        print("Testing extract_title...")
+        md = "# Hello"
+        self.assertEqual(extract_title(md), "Hello")
+        md = """
+This is a test
+
+# Heading 1
+
+-of markdown
+-heading extractor
+"""
+        self.assertEqual(extract_title(md), "Heading 1")
+        try:
+            md = """
+This is a test
+
+## of markdown
+
+with no h1"""
+            heading = extract_title(md)
+            self.assertTrue(False)
+        except Exception as e:
+            self.assertTrue(True)
         print("Passed!")
